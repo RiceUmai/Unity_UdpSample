@@ -8,6 +8,8 @@ public class inform
     public string address;
     public int port;
 
+    public string name;
+
     public Vector3 pos;
     public Vector3 rot;
     public Vector3 scal;
@@ -15,7 +17,7 @@ public class inform
 
 
 [Serializable]
-public class JSON
+public class JsonOBJ
 {
     //public string Ribal_ip;
     //public string Ribal_port;
@@ -26,20 +28,21 @@ public class JSON
     //public string message;
 
     public string type;
+    public string msg;
 
     public inform own;
     public inform ribal;
 
-    public JSON(eventType state)
+    public JsonOBJ(eventType state)
     {
         this.type = state.ToString();
     }
 
-    public static JSON CreateFromJSON(string data)
+    public static JsonOBJ CreateFromJSON(string data)
     {
         try
         {
-            return JsonUtility.FromJson<JSON>(data);
+            return JsonUtility.FromJson<JsonOBJ>(data);
         }
         catch (Exception e)
         {
@@ -47,7 +50,7 @@ public class JSON
             return null;
         }
     }
-    public static string CreateToJSON(JSON data)
+    public static string CreateToJSON(JsonOBJ data)
     {
         return JsonUtility.ToJson(data);
     }

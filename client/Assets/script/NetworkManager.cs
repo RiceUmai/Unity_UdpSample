@@ -1,10 +1,14 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
 
+
+/// <summary>
+/// Event Type
+/// </summary>
 public enum eventType
 {
     init,
@@ -30,15 +34,17 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
+    //server IP
     [SerializeField]
     private string Addrass = "localhost";
 
+    //server Port
     [SerializeField]
     private int Port = 6060;
 
     private UdpClient client;
 
-
+    //only test GUI
     [SerializeField]
     GUITest gui;
 
@@ -63,7 +69,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// サーバーへ接続
     /// </summary>
     /// <param name="Adddrass"></param>
     /// <param name="Port"></param>
@@ -83,7 +89,7 @@ public class NetworkManager : MonoBehaviour
             //byte[] sendBytes = Encoding.ASCII.GetBytes("Hello, from the client");
             //client.Send(sendBytes, sendBytes.Length);
 
-            JSON Massafe = new JSON(eventType.init);
+            JsonOBJ Massafe = new JsonOBJ(eventType.init);
             Data_Send(Massafe);
 
             Thread thread = new Thread(() => Data_Resiving());
@@ -100,21 +106,21 @@ public class NetworkManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// サーバへデータを送信する関数
     /// </summary>
     /// <param name="client"></param>
     /// <param name="Massage"></param>
-    public void Data_Send(JSON Massage)
+    public void Data_Send(JsonOBJ Massage)
     {
-        string msg = JSON.CreateToJSON(Massage);
+        string msg = JsonOBJ.CreateToJSON(Massage);
         byte[] sendBytes = Encoding.ASCII.GetBytes(msg);
         client.Send(sendBytes, sendBytes.Length);
     }
 
     /// <summary>
-    /// 
+    /// サーバからデータを受信
     /// </summary>
-    public void Data_Resiving()
+    private void Data_Resiving()
     {
         while (true)
         {
@@ -123,7 +129,7 @@ public class NetworkManager : MonoBehaviour
             string receivedString = Encoding.ASCII.GetString(receiveBytes);
             print("Message received from the server \n " + receivedString);
 
-            JSON data = JSON.CreateFromJSON(receivedString);
+            JsonOBJ data = JsonOBJ.CreateFromJSON(receivedString);
 
             if (data != null)
                 evectHandler(data);
@@ -131,18 +137,20 @@ public class NetworkManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// EventTypeによって処理分け
     /// </summary>
-    private void evectHandler(JSON data)
+    private void evectHandler(JsonOBJ data)
     {
         eventType state = (eventType)Enum.Parse(typeof(eventType), data.type);
 
         switch (state)
         {
             case eventType.init :
-
                 information.ribal_ip = data.ribal.address;
                 information.ribal_port = data.ribal.port;
+                break;
+
+            case eventType.Message:
                 break;
 
             default:
