@@ -30,9 +30,6 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public static int Ribal_port;
-    public static int Own_port;
-
     [SerializeField]
     private string Addrass = "localhost";
 
@@ -41,6 +38,9 @@ public class NetworkManager : MonoBehaviour
 
     private UdpClient client;
 
+
+    [SerializeField]
+    GUITest gui;
 
     private void Awake()
     {
@@ -56,7 +56,10 @@ public class NetworkManager : MonoBehaviour
 
     void OnDestroy()
     {
-        
+        information.own_ip = null;
+        information.own_port = 0;
+        information.ribal_ip = null;
+        information.ribal_port = 0;
     }
 
     /// <summary>
@@ -74,7 +77,8 @@ public class NetworkManager : MonoBehaviour
             _instance = this;
             client.Connect(Adddrass, Port);
 
-            Own_port = ((IPEndPoint)client.Client.LocalEndPoint).Port;
+            information.own_ip = ((IPEndPoint)client.Client.LocalEndPoint).Address.ToString();
+            information.own_port = ((IPEndPoint)client.Client.LocalEndPoint).Port;
 
             //byte[] sendBytes = Encoding.ASCII.GetBytes("Hello, from the client");
             //client.Send(sendBytes, sendBytes.Length);
@@ -136,8 +140,9 @@ public class NetworkManager : MonoBehaviour
         switch (state)
         {
             case eventType.init :
-                Debug.Log(data.Ribal_ip);
-                Debug.Log(data.Ribal_port);
+
+                information.ribal_ip = data.ribal.address;
+                information.ribal_port = data.ribal.port;
                 break;
 
             default:

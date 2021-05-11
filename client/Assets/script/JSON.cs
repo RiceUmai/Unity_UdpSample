@@ -3,15 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
+public class inform
+{
+    public string address;
+    public int port;
+
+    public Vector3 pos;
+    public Vector3 rot;
+    public Vector3 scal;
+}
+
+
+[Serializable]
 public class JSON
 {
-    public string Ribal_ip;
-    public string Ribal_port;
+    //public string Ribal_ip;
+    //public string Ribal_port;
+
+    //public string type;
+    //public string uuid;
+    //public string name;
+    //public string message;
 
     public string type;
-    public string uuid;
-    public string name;
-    public string message;
+
+    public inform own;
+    public inform ribal;
 
     public JSON(eventType state)
     {
@@ -35,30 +52,3 @@ public class JSON
         return JsonUtility.ToJson(data);
     }
 }
-
-
-[Serializable]
-public class JSON_gachar
-{
-    public string rank;
-    public string id;
-    public string num;
-
-    public static JSON_gachar CreateFromJSON(string data)
-    {
-        try
-        {
-            return JsonUtility.FromJson<JSON_gachar>(data);
-        }
-        catch (Exception e)
-        {
-            Debug.Log("<color=green> Client: </color> JSON«¿«¤«×ªÇªÏª¢ªêªÞª»ªó¡£NULLªÇÚ÷ª·ªÞª¹");
-            return null;
-        }
-    }
-    public static string CreateToJSON(JSON_gachar data)
-    {
-        return JsonUtility.ToJson(data);
-    }
-}
-

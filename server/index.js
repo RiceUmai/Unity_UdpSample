@@ -4,6 +4,8 @@ const server = dgram.createSocket('udp4');
 
 const { v4: uuidv4 } = require('uuid');
 
+const JsonInit = require('./JsonInit.js');
+
 const Port = 6060;
 
 var clients = [];
@@ -17,16 +19,23 @@ server.on('message', (msg, senderInfo) => {
   evectHandler(msg, senderInfo)
 });
 
-// server.on('close', () => {
-//   console.log('client has closed, closing server');
-// });
-
 server.on('listening', () => {
   const address = server.address();
   console.log(`server listening on ${address.address}:${address.port}`);
 });
 
 server.bind(Port);
+
+//=======================
+//=======================
+function clientsClear(clients) {
+  
+  for(let index in clients){
+  delete clients[index];
+  }
+  console.log("ClientsClear");
+}
+
 
 //=======================
 //=======================
@@ -41,22 +50,34 @@ function evectHandler(msg, senderInfo){
 
   switch(data.type){
     case 'init':
+
+    if(Object.keys(clients).length == 0){
+      setTimeout(clientsClear, 10000 , clients);
+    }
+
+    for(let index in clients){
+
+      var JsonObj = data;
+      JsonObj.ribal.address = clients[index].address;
+      JsonObj.ribal.port = clients[index].port;
+      Emit(JsonObj, senderInfo);
+    }
+    
     var thisPlayerId = uuidv4();
     clients[thisPlayerId] = senderInfo
+    console.log(Object.keys(clients).length);
     console.log(senderInfo);
+
     
-
-    var JsonObj = { type : 'init', Ribal_ip : senderInfo.address, Ribal_port : senderInfo.port}
-    var JsonString = JSON.stringify(JsonObj);
-
-    //Emit(JsonString ,senderInfo);
-    Broadcast(JsonString, clients, senderInfo);
+    var JsonObj = data;
+    JsonObj.ribal.address = senderInfo.address;
+    JsonObj.ribal.port = senderInfo.port;
+    //JsonObj.ribal.pos.x = 0.5;
+    Broadcast(JsonObj, clients, senderInfo);
     break;
     
     default:
-    //   server.send(msg,senderInfo.port,senderInfo.address,()=>{
-    //     console.log(`Message sent to ${senderInfo.address}:${senderInfo.port}`)
-    //   })
+
     break;
   }}
 
@@ -65,27 +86,23 @@ function evectHandler(msg, senderInfo){
   }
 }
 
-function Emit(msg, senderInfo){
+function Emit(JsonObj, senderInfo){
+
+  var msg = JSON.stringify(JsonObj);
   server.send(msg, senderInfo.port, senderInfo.address,()=>{
     console.log(`Message sent to ${senderInfo.address}:${senderInfo.port} = ${msg}`)
   })
 }
 
 
-function Broadcast(msg, clients, senderInfo){
+function Broadcast(JsonObj, clients, senderInfo){
+
+  var msg = JSON.stringify(JsonObj);
   for(let index in clients){
-    
-    if(clients[index].port === senderInfo.port){
+
+    if(clients[index].port === senderInfo.port)
       continue;
-    }
 
-    server.send(msg, clients[index].port, clients[index].address,()=>{
-      console.log(`Message sent to ${clients[index].address}:${clients[index].port}`)
-    })
+    Emit(JsonObj, clients[index])
   }
-
-  // Object.keys(clients).forEach( function(value) {
-
-  //   console.log( value + '：' + this[value] );
-  // }, arr)
 }
