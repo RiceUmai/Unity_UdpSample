@@ -13,10 +13,13 @@ Sample Codeとクラスを制作しました。
 
 ## 使用言語
 * C# (System.Net.Sockets)
-* Node.js (dgram)
+* Node.js v14.15.0 (dgram)
 
 ## 製作期間
 * 2021/05/09 ~ 2021/05/11
+
+## 具現した技能
+* Client間のマッチング (2人制限)
 
 ## 動画(YouTube)
 * https://youtu.be/fKeTiaLIYA8
