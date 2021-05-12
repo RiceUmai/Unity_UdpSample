@@ -11,9 +11,4 @@ public class Player : MonoBehaviour
         jsonObj.msg = "Player sender";
         NetworkManager.instance.Data_Send(jsonObj);
     }
-
-    void Update()
-    {
-
-    }
 }

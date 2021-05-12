@@ -59,7 +59,7 @@ function evectHandler(msg, senderInfo) {
       case 'init':
 
         if (Object.keys(clients).length == 0) {
-          setTimeout(clientsClear, 5000, clients);
+          setTimeout(clientsClear, 20000, clients);
         }
 
         for (let index in clients) {
@@ -101,7 +101,7 @@ function Emit(JsonObj, senderInfo) {
 
   var msg = JSON.stringify(JsonObj);
   server.send(msg, senderInfo.port, senderInfo.address, () => {
-    console.log(`Message sent to ${senderInfo.address}:${senderInfo.port} = ${msg}`)
+    //console.log(`Message sent to ${senderInfo.address}:${senderInfo.port} = ${msg}`)
   })
 }
 

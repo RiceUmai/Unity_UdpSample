@@ -19,14 +19,6 @@ public class inform
 [Serializable]
 public class JsonOBJ
 {
-    //public string Ribal_ip;
-    //public string Ribal_port;
-
-    //public string type;
-    //public string uuid;
-    //public string name;
-    //public string message;
-
     public string type;
     public string msg;
 

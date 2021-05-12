@@ -44,20 +44,11 @@ public class NetworkManager : MonoBehaviour
 
     private UdpClient client;
 
-    //only test GUI
-    [SerializeField]
-    GUITest gui;
-
     private void Awake()
     {
         if (instance != null) return;
 
         Connect(Addrass, Port);
-    }
-
-    void Start()
-    {
-
     }
 
     void OnDestroy()
