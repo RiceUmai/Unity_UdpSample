@@ -1,3 +1,6 @@
+# 한국어 포스팅 링크
+[https://first-hugo-blog.netlify.app/ko/posts/unity_udpsample/unity_udpsample/](https://first-hugo-blog.netlify.app/ko/posts/unity_udpsample/unity_udpsample/)
+
 # Unity_UdpSample
 
 # 製作理由
